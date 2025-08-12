@@ -61,6 +61,10 @@ ssh -i ~/.ssh/<KEY> -L 8188:localhost:8188 ubuntu@<VM_IP>
 # http://localhost:8188
 ```
 
+systemctl is-active comfyui
+wait to be active (about 4min since the start of the VM)
+
+
 ---
 
 ## Repository layout
