@@ -10,14 +10,16 @@ cd ~/ComfyUI
 # shellcheck disable=SC1091
 source comfy-env/bin/activate
 
-pip install -q "huggingface_hub[cli]"
-mkdir -p models/diffusion_models models/vae models/text_encoders /tmp/wan22
+# modern HF CLI (uses `hf download`)
+pip install -q --upgrade "huggingface_hub>=0.25"
+
+mkdir -p models/diffusion_models models/vae models/text_encoders models/loras /tmp/wan22
 
 VARIANT="${1:-I2V_A14B}"   # TI2V_5B | T2V_A14B | I2V_A14B
 REPO="Comfy-Org/Wan_2.2_ComfyUI_Repackaged"
 
 download() {
-  huggingface-cli download "$REPO" --local-dir /tmp/wan22 --include "$1"
+  hf download "$REPO" --include "$1" --local-dir /tmp/wan22
 }
 
 case "$VARIANT" in
@@ -32,14 +34,19 @@ case "$VARIANT" in
     ;;
 
   T2V_A14B)
-    # 14B Text-to-Video (two shards) + Wan2.1 VAE + UMT5-XXL (FP8)
+    # 14B Text-to-Video (two shards) + Wan2.1 VAE + UMT5-XXL (FP8) + LoRAs
     download "split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors"
     download "split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors"
     download "split_files/vae/wan_2.1_vae.safetensors"
     download "split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+    # NEW: T2V LoRAs
+    download "split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors"
+    download "split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors"
+
     mv -f /tmp/wan22/split_files/diffusion_models/wan2.2_t2v_*_14B_fp8_scaled.safetensors models/diffusion_models/
     mv -f /tmp/wan22/split_files/vae/wan_2.1_vae.safetensors models/vae/
     mv -f /tmp/wan22/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors models/text_encoders/
+    mv -f /tmp/wan22/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_*.safetensors models/loras/
     ;;
 
   I2V_A14B|*)
@@ -55,5 +62,13 @@ case "$VARIANT" in
 esac
 
 deactivate || true
-sudo systemctl restart comfyui
-echo "Wan 2.2 ($VARIANT) installed. Tunnel to http://localhost:8188"
+
+# Restart ComfyUI if the service exists, else start a background process
+if systemctl list-unit-files | grep -q '^comfyui\.service'; then
+  sudo systemctl restart comfyui || true
+else
+  echo "comfyui.service not found; starting ComfyUI in background."
+  nohup ~/ComfyUI/comfy-env/bin/python ~/ComfyUI/main.py --listen 127.0.0.1 --port 8188 > ~/comfyui.log 2>&1 &
+fi
+
+echo "Wan 2.2 ($VARIANT) installed. LoRAs (if T2V) placed in models/loras/. Tunnel to http://localhost:8188"
