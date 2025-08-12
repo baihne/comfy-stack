@@ -1,0 +1,4 @@
+#cloud-config
+runcmd:
+  - [ su, -l, ubuntu, -c, "cd /home/ubuntu && git clone https://github.com/baihne/comfy-stack || true" ]
+  - [ su, -l, ubuntu, -c, "cd /home/ubuntu/comfy-stack/scripts && ./bootstrap_comfy.sh" ]

@@ -1,0 +1,9 @@
+# never commit models or venvs
+ComfyUI/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.ipynb
+__pycache__/
+*.log
