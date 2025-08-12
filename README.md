@@ -24,7 +24,7 @@ Bootstrap ComfyUI on a fresh HyperStack VM (Ubuntu 24.04 + CUDA 12.8), keep it i
 2. Clone repo and run bootstrap:
 
    ```
-   git clone https://github.com/<you>/comfy-stack
+   git clone https://github.com/baihne/comfy-stack
    cd comfy-stack/scripts
    ./bootstrap_comfy.sh
    ```
@@ -32,7 +32,7 @@ Bootstrap ComfyUI on a fresh HyperStack VM (Ubuntu 24.04 + CUDA 12.8), keep it i
 3. Connect from your laptop via SSH tunnel (keep this terminal open):
 
    ```
-   ssh -i ~/.ssh/<KEY> -L 8188:localhost:8188 ubuntu@<VM_IP>
+   ssh -i ~/.ssh/HyperStackCanada_Hyperstack -L 8188:localhost:8188 ubuntu@<VM_IP>
    ```
 
    Open in your browser:
@@ -54,7 +54,7 @@ runcmd:
   - [ su, -l, ubuntu, -c, "cd /home/ubuntu/comfy-stack/scripts && ./bootstrap_comfy.sh" ]
 ```
 
-Replace `https://github.com/<you>/comfy-stack` with your repo URL. After boot, tunnel from your laptop:
+Replace `https://github.com/baihne/comfy-stack` with your repo URL. After boot, tunnel from your laptop:
 
 ```
 ssh -i ~/.ssh/<KEY> -L 8188:localhost:8188 ubuntu@<VM_IP>
