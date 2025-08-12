@@ -18,7 +18,7 @@ Bootstrap ComfyUI on a fresh HyperStack VM (Ubuntu 24.04 + CUDA 12.8), keep it i
 1. SSH to a new VM:
 
    ```
-   ssh -i ~/.ssh/<KEY> ubuntu@<VM_IP>
+   ssh -i ~/.ssh/HyperStackCanada_Hyperstack ubuntu@<VM_IP>
    ```
 
 2. Clone repo and run bootstrap:
