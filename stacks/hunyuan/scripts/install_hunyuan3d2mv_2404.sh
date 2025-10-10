@@ -51,7 +51,13 @@ PY
 
 # ---------- Install Hunyuan3D-2 requirements ----------
 cd "$APP_DIR"
-pip install -r requirements.txt
+# Install without texgen dependencies to avoid custom_rasterizer requirement
+pip install torch torchvision torchaudio
+pip install gradio==5.33.0 gradio_client==1.10.2 pydantic==2.10.6
+pip install transformers diffusers accelerate
+pip install numpy opencv-python-headless Pillow
+pip install trimesh[all] rembg
+pip install "huggingface_hub>=0.34" hf_transfer
 pip install -e .
 
 # ---------- Model weights (cache multiview models) ----------
@@ -141,7 +147,26 @@ export PYTHONPATH="\$APP_DIR:\${PYTHONPATH:-}"
 echo "🎭 Starting Hunyuan3D-2mv (Multiview) - Variant: $MODEL_VARIANT"
 echo "📡 Access via: http://\${GRADIO_HOST:-0.0.0.0}:\${GRADIO_PORT:-$PORT}"
 
-exec python "\$APP_DIR/gradio_app.py" \\
+# Create modified gradio app that disables texture generation
+cat > "\$APP_DIR/gradio_app_2mv_only.py" << 'PYEOF'
+import sys
+import os
+import argparse
+from pathlib import Path
+
+# Add the app directory to Python path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# Disable texture generation by setting environment variable
+os.environ['DISABLE_TEXGEN'] = '1'
+
+# Import and run the original gradio app
+from gradio_app import main
+if __name__ == "__main__":
+    main()
+PYEOF
+
+exec python "\$APP_DIR/gradio_app_2mv_only.py" \\
   --model_path "\$APP_DIR/models/tencent--Hunyuan3D-2mv" \\
   --subfolder $SUBFOLDER \\
   --low_vram_mode \\
