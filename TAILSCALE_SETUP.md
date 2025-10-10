@@ -19,6 +19,7 @@
 ```bash
 # Connect to your VPS
 ssh -i ~/.ssh/HyperStackCanada_Hyperstack ubuntu@YOUR-VPS-IP
+ssh -i ~/.ssh/HyperStackNorway_Hyperstack ubuntu@YOUR-VPS-IP
 
 # Clone and navigate
 git clone https://github.com/baihne/comfy-stack && cd comfy-stack
