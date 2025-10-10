@@ -37,8 +37,16 @@ fi
 
 # Add Tailscale's GPG key and repository
 echo -e "\n${BLUE}Step 2: Adding Tailscale repository...${NC}"
+
+# Import Tailscale GPG key properly
 curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.noarmor.gpg | $SUDO tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
-curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.list | $SUDO tee /etc/apt/sources.list.d/tailscale.list
+
+# Detect Ubuntu version
+UBUNTU_VERSION=$(lsb_release -cs 2>/dev/null || echo "focal")
+echo -e "${BLUE}Detected Ubuntu version: $UBUNTU_VERSION${NC}"
+
+# Add repository with detected version
+echo "deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg] https://pkgs.tailscale.com/stable/ubuntu $UBUNTU_VERSION main" | $SUDO tee /etc/apt/sources.list.d/tailscale.list > /dev/null
 
 # Update package list with new repository
 echo -e "${BLUE}Updating package list with Tailscale repository...${NC}"

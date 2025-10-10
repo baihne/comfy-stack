@@ -21,8 +21,16 @@ sudo apt install -y curl
 
 # Add Tailscale repository
 echo "[tailscale] Adding Tailscale repository..."
+
+# Import Tailscale GPG key properly
 curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
-curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.list | sudo tee /etc/apt/sources.list.d/tailscale.list
+
+# Detect Ubuntu version
+UBUNTU_VERSION=$(lsb_release -cs 2>/dev/null || echo "focal")
+echo "[tailscale] Detected Ubuntu version: $UBUNTU_VERSION"
+
+# Add repository with detected version
+echo "deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg] https://pkgs.tailscale.com/stable/ubuntu $UBUNTU_VERSION main" | sudo tee /etc/apt/sources.list.d/tailscale.list > /dev/null
 
 # Update and install Tailscale
 sudo apt update
