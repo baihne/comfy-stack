@@ -104,6 +104,21 @@ case "$MODEL_VARIANT" in
     ;;
 esac
 
+# ---------- Create example prompts file (required by gradio_app.py) ----------
+mkdir -p "$APP_DIR/assets"
+cat > "$APP_DIR/assets/example_prompts.txt" << 'PROMPTS'
+A cute cat
+A red sports car
+A wooden chair
+A futuristic robot
+A vintage camera
+A coffee cup
+A tree
+A house
+A dragon
+A spaceship
+PROMPTS
+
 # ---------- Run wrapper for multiview ----------
 cd "$APP_DIR"
 cat > run_hunyuan3d_mv.sh <<EOS
@@ -111,6 +126,9 @@ cat > run_hunyuan3d_mv.sh <<EOS
 set -Eeuo pipefail
 APP_DIR="\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
 source "\$APP_DIR/hy3d2mv-py311/bin/activate"
+
+# Change to correct directory for assets
+cd "\$APP_DIR"
 
 # Make Torch shared libs visible
 export LD_LIBRARY_PATH="\$(python - <<'PY'
@@ -122,7 +140,7 @@ PY
 export PYTHONPATH="\$APP_DIR:\${PYTHONPATH:-}"
 
 echo "🎭 Starting Hunyuan3D-2mv (Multiview) - Variant: $MODEL_VARIANT"
-echo "📡 Access via: http://\${GRADIO_HOST:-$HOST}:\${GRADIO_PORT:-$PORT}"
+echo "📡 Access via: http://\${GRADIO_HOST:-0.0.0.0}:\${GRADIO_PORT:-$PORT}"
 
 exec python "\$APP_DIR/gradio_app.py" \\
   --model_path tencent/Hunyuan3D-2mv \\
@@ -130,7 +148,7 @@ exec python "\$APP_DIR/gradio_app.py" \\
   --texgen_model_path tencent/Hunyuan3D-2 \\
   --low_vram_mode \\
   $FLASH_VDM \\
-  --host \${GRADIO_HOST:-$HOST} \\
+  --host \${GRADIO_HOST:-0.0.0.0} \\
   --port \${GRADIO_PORT:-$PORT}
 EOS
 chmod +x run_hunyuan3d_mv.sh

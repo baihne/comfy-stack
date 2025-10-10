@@ -201,7 +201,7 @@ def create_interface():
                     height=400
                 )
                 
-                status = gr.Textbook(
+                status = gr.Textbox(
                     label="Status",
                     lines=3
                 )
@@ -259,7 +259,7 @@ echo "🔗 Pipeline: Input → 2mv Shape → 2.1 PBR → Output"
 echo "📡 Access: http://\${GRADIO_HOST:-127.0.0.1}:\${GRADIO_PORT:-7862}"
 
 exec python "\$HYBRID_DIR/hybrid_app.py" \\
-  --host \${GRADIO_HOST:-127.0.0.1} \\
+  --host \${GRADIO_HOST:-0.0.0.0} \\
   --port \${GRADIO_PORT:-7862}
 EOS
 
