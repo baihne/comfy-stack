@@ -24,7 +24,7 @@ You can pass these **as env vars** or by **editing the run script**:
 * **Port / Host**
 
   ```bash
-  GRADIO_PORT=7861 GRADIO_HOST=127.0.0.1 ~/Hunyuan3D-2.1/run_hunyuan3d.sh
+  GRADIO_PORT=7861 GRADIO_HOST=0.0.0.0 ~/Hunyuan3D-2.1/run_hunyuan3d.sh
   ```
 * **Low VRAM mode** (safer on smaller GPUs; already enabled in the script)
 
@@ -150,10 +150,13 @@ curl -s http://127.0.0.1:7860/config | head -c 300; echo
   And ensure it’s on `PYTHONPATH` at runtime (runner already does).
 
 * **`ModuleNotFoundError: hy3dshape.utils`**
-  Run from repo root (the runner now `cd`s into it). Manually:
+  **This is now automatically fixed** in the installation script (adds hy3dshape to PYTHONPATH).
+  If you encounter this with an older installation, manually:
 
   ```bash
-  cd ~/Hunyuan3D-2.1 && ./run_hunyuan3d.sh
+  cd ~/Hunyuan3D-2.1
+  export PYTHONPATH="$PWD/hy3dshape:$PWD:${PYTHONPATH:-}"
+  ./run_hunyuan3d.sh
   ```
 
 ---
