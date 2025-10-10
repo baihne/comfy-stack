@@ -19,6 +19,7 @@ This happens when the server IP changes or is reused.
 
 ```bash
 # Clone the repository
+rm -rf comfy-stack  # Remove existing directory if needed
 git clone https://github.com/baihne/comfy-stack.git
 cd comfy-stack
 
