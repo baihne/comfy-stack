@@ -8,17 +8,19 @@ Visit: https://login.tailscale.com/admin/settings/keys
 - ❌ Ephemeral 
 - ✅ Pre-approved
 
-### 2. Upload & Install
+### 2. Deploy with Auto-Install
 ```bash
-# Upload script to VPS
-scp -i /path/to/your/key scripts/install_tailscale_vps.sh user@your-vps-ip:~/
+# Clone repo on VPS
+git clone https://github.com/baihne/comfy-stack && cd comfy-stack
 
-# SSH to VPS
-ssh -i /path/to/your/key user@your-vps-ip
+# Deploy ComfyUI + Wan 2.2 (video generation)
+./deployment/deploy_comfyui_wan.sh I2V_A14B YOUR-TAILSCALE-AUTH-KEY
 
-# Run installation
-chmod +x install_tailscale_vps.sh
-sudo ./install_tailscale_vps.sh YOUR-TAILSCALE-AUTH-KEY
+# Deploy Hunyuan3D Hybrid (3D generation - recommended)
+./deployment/deploy_hunyuan_hybrid.sh YOUR-TAILSCALE-AUTH-KEY standard
+
+# Deploy complete AI stack
+./deployment/deploy_complete_stack.sh both I2V_A14B YOUR-TAILSCALE-AUTH-KEY
 ```
 
 ### 3. Test Connection
@@ -31,8 +33,10 @@ ssh user@100.x.x.x
 ```
 
 ### 4. Access Services
-- **ComfyUI**: http://100.x.x.x:8188
-- **Gradio**: http://100.x.x.x:7860
+- **ComfyUI** (video): http://100.x.x.x:8188
+- **Hunyuan3D Hybrid** (3D): http://100.x.x.x:7862 ⭐
+- **Hunyuan3D-2.1** (PBR): http://100.x.x.x:7860
+- **Hunyuan3D-2mv** (multiview): http://100.x.x.x:7861
 
 ## 🔧 Troubleshooting
 ```bash

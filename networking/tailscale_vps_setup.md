@@ -22,20 +22,25 @@ This guide will help you set up Tailscale on your Hyperstack VPS to bypass firew
    - **Tags**: Leave empty for personal use
 4. Copy the generated key (starts with `tskey-auth-`)
 
-### Step 2: Upload and Execute Installation Script
+### Step 2: Deploy AI Stack with Tailscale
 
 ```bash
-# 1. Copy script to your VPS
-scp -i /path/to/your/key scripts/install_tailscale_vps.sh user@your-vps-ip:~/
-
-# 2. SSH into your VPS
+# 1. SSH into your VPS
 ssh -i /path/to/your/key user@your-vps-ip
 
-# 3. Make script executable
-chmod +x install_tailscale_vps.sh
+# 2. Clone the repository
+git clone https://github.com/baihne/comfy-stack && cd comfy-stack
 
-# 4. Run installation with your auth key
-sudo ./install_tailscale_vps.sh YOUR-TAILSCALE-AUTH-KEY
+# 3. Deploy with Tailscale (choose one):
+
+# Option A: Hunyuan3D Hybrid (recommended for 3D generation)
+./deployment/deploy_hunyuan_hybrid.sh YOUR-TAILSCALE-AUTH-KEY standard
+
+# Option B: ComfyUI + Wan 2.2 (video generation)
+./deployment/deploy_comfyui_wan.sh I2V_A14B YOUR-TAILSCALE-AUTH-KEY
+
+# Option C: Complete AI stack (both video + 3D)
+./deployment/deploy_complete_stack.sh both I2V_A14B YOUR-TAILSCALE-AUTH-KEY
 ```
 
 ### Step 3: Verify Installation
@@ -53,11 +58,18 @@ After installation, the script will display:
 # SSH access
 ssh user@100.x.x.x
 
-# ComfyUI access (browser)
+# AI Services access (browser):
+# ComfyUI (video generation)
 http://100.x.x.x:8188
 
-# Gradio access (browser) 
-http://100.x.x.x:7860  # or your specific port
+# Hunyuan3D Hybrid (3D generation - recommended)
+http://100.x.x.x:7862
+
+# Hunyuan3D-2.1 (PBR textures)
+http://100.x.x.x:7860
+
+# Hunyuan3D-2mv (multiview shapes)
+http://100.x.x.x:7861
 ```
 
 ## Post-Installation Workflow
@@ -74,10 +86,12 @@ ssh user@100.x.x.x  # Tailscale IP
 ```
 
 ### Service Access
-- **ComfyUI**: `http://100.x.x.x:8188`
-- **Gradio Apps**: `http://100.x.x.x:[port]`
+- **ComfyUI** (video): `http://100.x.x.x:8188`
+- **Hunyuan3D Hybrid** (3D): `http://100.x.x.x:7862` ⭐
+- **Hunyuan3D-2.1** (PBR): `http://100.x.x.x:7860`
+- **Hunyuan3D-2mv** (multiview): `http://100.x.x.x:7861`
 - **File Transfer**: `scp file user@100.x.x.x:~/`
-- **Port Forwarding**: `ssh -L 8188:localhost:8188 user@100.x.x.x`
+- **Port Forwarding**: `ssh -L 7862:localhost:7862 user@100.x.x.x`
 
 ## Spot Instance Considerations
 
@@ -119,12 +133,21 @@ sudo ufw allow out on tailscale0
 
 ### Service Access Issues
 ```bash
-# Check if ComfyUI is running
-ps aux | grep comfy
-netstat -tlnp | grep 8188
+# Check if services are running
+ps aux | grep comfy           # ComfyUI
+ps aux | grep python          # Hunyuan3D services
+netstat -tlnp | grep 8188     # ComfyUI
+netstat -tlnp | grep 7862     # Hunyuan3D Hybrid
+netstat -tlnp | grep 7860     # Hunyuan3D-2.1
+netstat -tlnp | grep 7861     # Hunyuan3D-2mv
 
 # Check if services bind to all interfaces
 # Services should bind to 0.0.0.0:port, not 127.0.0.1:port
+
+# Restart services if needed
+~/Hunyuan3D-Hybrid/run_hybrid.sh          # Hybrid interface
+~/Hunyuan3D-2.1/run_hunyuan3d.sh         # 2.1 only
+~/Hunyuan3D-2mv/run_hunyuan3d_mv.sh      # 2mv only
 ```
 
 ## Security Benefits
@@ -160,8 +183,9 @@ sudo apt update && sudo apt upgrade tailscale
 [Your Laptop] ←→ [Tailscale Mesh Network] ←→ [VPS]
      ↓                                           ↓
 [Home Network]                            [ComfyUI:8188]
-[Office Network]                          [Gradio Apps]
-[Mobile Device]
+[Office Network]                          [Hunyuan3D Hybrid:7862]
+[Mobile Device]                           [Hunyuan3D-2.1:7860]
+                                         [Hunyuan3D-2mv:7861]
 ```
 
 All your Tailscale-enabled devices can now securely access your VPS services regardless of network restrictions.

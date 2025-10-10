@@ -1,6 +1,40 @@
-# Hunyuan3D-2.1 on Ubuntu 24.04 (Py 3.11, CUDA 12.x) — **Quick Use & Options**
+# Hunyuan3D Deployment Guide
 
-## TL;DR — Start it
+## 🎯 **Recommended: Hybrid Deployment (2mv + 2.1 PBR)**
+
+**One-command deployment** with automatic pipeline: Input → 2mv Shape → 2.1 PBR → Output
+
+```bash
+# Deploy unified hybrid interface
+./deployment/deploy_hunyuan_hybrid.sh TAILSCALE_AUTH_KEY standard
+
+# Access via Tailscale
+http://100.x.x.x:7862
+```
+
+**Features:**
+- ✅ **Single interface** handles both single images and multiview inputs
+- ✅ **Automatic workflow**: Shape generation (2mv) → PBR texturing (2.1)
+- ✅ **Production quality**: Best shape consistency + PBR materials
+- ✅ **Tailscale ready**: Secure access from anywhere
+
+**See [HYBRID_WORKFLOW.md](HYBRID_WORKFLOW.md) for complete details.**
+
+---
+
+## 📋 **Alternative Deployments**
+
+| Option | Command | Use Case |
+|--------|---------|----------|
+| **Hybrid** ⭐ | `./deployment/deploy_hunyuan_hybrid.sh TAILSCALE_AUTH_KEY standard` | Best overall experience |
+| **2mv Only** | `./deployment/deploy_hunyuan_multiview.sh TAILSCALE_AUTH_KEY standard` | Multiview shapes only |
+| **2.1 Only** | `./deployment/deploy_hunyuan.sh TAILSCALE_AUTH_KEY` | PBR textures only |
+
+---
+
+## 🔧 **Manual 2.1 Setup (Advanced Users)**
+
+### TL;DR — Start Hunyuan3D-2.1
 
 ```bash
 # on the VM
@@ -59,15 +93,23 @@ You can pass these **as env vars** or by **editing the run script**:
 
 ---
 
-## Install it (one-shot script)
+## Install it (automated deployment script)
 
-Create the installer with **vim** and paste the script we built:
+**Recommended**: Use the deployment scripts from the repo root:
 
 ```bash
-vim ~/install_hunyuan3d21_2404.sh
-# in vim: :set paste  → i → paste → Esc → :set nopaste → :wq
-chmod +x ~/install_hunyuan3d21_2404.sh
-~/install_hunyuan3d21_2404.sh
+# Hybrid (automatic 2mv → 2.1 pipeline)
+./deployment/deploy_hunyuan_hybrid.sh TAILSCALE_AUTH_KEY standard
+
+# Or 2.1 only
+./deployment/deploy_hunyuan.sh TAILSCALE_AUTH_KEY
+```
+
+**Manual installation** (advanced users):
+
+```bash
+# Use the provided installation script
+~/comfy-stack/stacks/hunyuan/scripts/install_hunyuan3d21_2404.sh
 ```
 
 What it does:
@@ -89,7 +131,11 @@ What it does:
 ## Health checks
 
 ```bash
-# Is the server listening?
+# Hybrid interface (port 7862)
+ss -ltnp | grep :7862 || true
+curl -I http://127.0.0.1:7862
+
+# Individual 2.1 interface (port 7860)
 ss -ltnp | grep :7860 || true
 curl -I http://127.0.0.1:7860
 curl -s http://127.0.0.1:7860/config | head -c 300; echo

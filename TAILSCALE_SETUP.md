@@ -26,6 +26,9 @@ git clone https://github.com/baihne/comfy-stack && cd comfy-stack
 
 # Use the key directly (replace YOUR_ACTUAL_KEY with your real key)
 ./deployment/deploy_comfyui_wan.sh I2V_A14B tskey-auth-kAbCdEf1234567890
+
+# Or deploy Hunyuan3D Hybrid (recommended for 3D generation)
+./deployment/deploy_hunyuan_hybrid.sh tskey-auth-kAbCdEf1234567890 standard
 ```
 
 ### ✅ Method 2: Environment Variable (Most Secure)
@@ -36,6 +39,9 @@ export TAILSCALE_AUTH_KEY="tskey-auth-kAbCdEf1234567890"
 
 # Then run without the key parameter
 ./deployment/deploy_comfyui_wan.sh I2V_A14B
+
+# Or deploy Hunyuan3D Hybrid
+./deployment/deploy_hunyuan_hybrid.sh "" standard
 ```
 
 ### ✅ Method 3: Temporary File (For repeated use)
@@ -78,7 +84,10 @@ Test access:
 ```bash
 # From any of your other devices with Tailscale
 ssh ubuntu@100.x.x.x
-# Open browser to: http://100.x.x.x:8188
+
+# Access your deployed services:
+# ComfyUI: http://100.x.x.x:8188
+# Hunyuan3D Hybrid: http://100.x.x.x:7862
 ```
 
 ## Key Rotation (Recommended every 90 days)
@@ -111,7 +120,15 @@ ssh -i ~/.ssh/HyperStackCanada_Hyperstack ubuntu@YOUR-CURRENT-VPS-IP
 
 # 3. Deploy with your real key
 cd comfy-stack
+
+# For video generation (ComfyUI + Wan 2.2):
 ./deployment/deploy_comfyui_wan.sh I2V_A14B YOUR_REAL_TAILSCALE_KEY_HERE
+
+# For 3D generation (Hunyuan3D Hybrid - recommended):
+./deployment/deploy_hunyuan_hybrid.sh YOUR_REAL_TAILSCALE_KEY_HERE standard
+
+# For both (complete AI stack):
+./deployment/deploy_complete_stack.sh both I2V_A14B YOUR_REAL_TAILSCALE_KEY_HERE
 ```
 
 ## 🎯 Why This Solves Your Spot Instance Problem
