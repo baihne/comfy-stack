@@ -41,13 +41,19 @@ ssh -L 8188:localhost:8188 ubuntu@YOUR-VPS-IP
 
 ## Available Stacks
 
-| Stack | Command | Description |
-|-------|---------|-------------|
-| ComfyUI + I2V | `./deployment/deploy_comfyui_wan.sh I2V_A14B TAILSCALE_AUTH_KEY` | Image to Video 14B |
-| ComfyUI + T2V | `./deployment/deploy_comfyui_wan.sh T2V_A14B TAILSCALE_AUTH_KEY` | Text to Video 14B |
-| ComfyUI + TI2V | `./deployment/deploy_comfyui_wan.sh TI2V_5B TAILSCALE_AUTH_KEY` | Text/Image to Video 5B |
-| Hunyuan3D | `./deployment/deploy_hunyuan.sh TAILSCALE_AUTH_KEY` | 3D Generation (2.1) |
-| Hunyuan3D Multiview | `./deployment/deploy_hunyuan_multiview.sh TAILSCALE_AUTH_KEY standard` | 3D Generation (2mv) |
+| Stack | Command | Description | VRAM |
+|-------|---------|-------------|------|
+| ComfyUI + I2V | `./deployment/deploy_comfyui_wan.sh I2V_A14B TAILSCALE_AUTH_KEY` | Image to Video 14B | ~12GB |
+| ComfyUI + T2V | `./deployment/deploy_comfyui_wan.sh T2V_A14B TAILSCALE_AUTH_KEY` | Text to Video 14B | ~12GB |
+| ComfyUI + TI2V | `./deployment/deploy_comfyui_wan.sh TI2V_5B TAILSCALE_AUTH_KEY` | Text/Image to Video 5B | ~8GB |
+| **Hunyuan3D Hybrid** ⭐ | Deploy both below | **Multiview shapes + PBR textures** | **6GB + 21GB** |
+| ├─ Hunyuan3D-2mv | `./deployment/deploy_hunyuan_multiview.sh TAILSCALE_AUTH_KEY standard` | Multiview shape generation | ~6GB |
+| └─ Hunyuan3D-2.1 | `./deployment/deploy_hunyuan.sh TAILSCALE_AUTH_KEY` | PBR texture generation | ~21GB |
+
+### 🎯 **Recommended: Hybrid Workflow**
+Deploy **both** Hunyuan3D stacks for optimal results:
+1. **Shape**: Use 2mv (handles single + multiview inputs)
+2. **Texture**: Use 2.1 PBR pipeline for production-quality materials
 
 ---
 
