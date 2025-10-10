@@ -115,12 +115,15 @@ PY
 # Make mesh_inpaint_processor importable
 export PYTHONPATH="$APP_DIR/hy3dpaint/DifferentiableRenderer:${PYTHONPATH:-}"
 
+# Make hy3dshape module importable
+export PYTHONPATH="$APP_DIR/hy3dshape:$APP_DIR:${PYTHONPATH:-}"
+
 exec python "$APP_DIR/gradio_app.py" \
   --model_path tencent/Hunyuan3D-2.1 \
   --subfolder hunyuan3d-dit-v2-1 \
   --texgen_model_path tencent/Hunyuan3D-2.1 \
   --low_vram_mode \
-  --host ${GRADIO_HOST:-127.0.0.1} \
+  --host ${GRADIO_HOST:-0.0.0.0} \
   --port ${GRADIO_PORT:-7860}
 EOS
 chmod +x run_hunyuan3d.sh
