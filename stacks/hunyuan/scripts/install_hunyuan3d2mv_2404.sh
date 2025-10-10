@@ -58,13 +58,15 @@ pip install -e .
 pip install -U "huggingface_hub>=0.34" hf_transfer
 export HF_HUB_ENABLE_HF_TRANSFER=1
 
-echo "📥 Downloading multiview models..."
+echo "📥 Downloading multiview models to local directory..."
 python - <<'PY'
 from huggingface_hub import snapshot_download
 import os
 
-# Cache multiview shape models
-cache_mv = os.path.expanduser("~/.cache/huggingface/hub/models--tencent--Hunyuan3D-2mv")
+# Download directly to app directory (avoid cache bloat)
+app_dir = os.path.expanduser("~/Hunyuan3D-2mv")
+
+# Download multiview shape models
 snapshot_download(
     repo_id="tencent/Hunyuan3D-2mv",
     allow_patterns=[
@@ -72,21 +74,18 @@ snapshot_download(
         "hunyuan3d-dit-v2-mv-turbo/*",
         "hunyuan3d-dit-v2-mv-fast/*",
     ],
+    local_dir=f"{app_dir}/models/tencent--Hunyuan3D-2mv",
     local_dir_use_symlinks=False,
 )
 
-# Cache texture models (from Hunyuan3D-2)
-cache_2 = os.path.expanduser("~/.cache/huggingface/hub/models--tencent--Hunyuan3D-2")
-snapshot_download(
-    repo_id="tencent/Hunyuan3D-2",
-    allow_patterns=[
-        "hunyuan3d-texgen-v2-0/*",
-    ],
-    local_dir_use_symlinks=False,
-)
-
-print("✓ Multiview models cached")
+print("✓ Multiview models downloaded to local directory")
 PY
+
+# Clean up HuggingFace cache to save space
+echo "🧹 Cleaning HuggingFace cache to save space..."
+rm -rf ~/.cache/huggingface/hub/models--tencent--Hunyuan3D-2mv || true
+rm -rf ~/.cache/huggingface/hub/models--tencent--Hunyuan3D-2 || true
+echo "✓ Cache cleaned"
 
 # ---------- Determine model subfolder based on variant ----------
 case "$MODEL_VARIANT" in
@@ -143,9 +142,8 @@ echo "🎭 Starting Hunyuan3D-2mv (Multiview) - Variant: $MODEL_VARIANT"
 echo "📡 Access via: http://\${GRADIO_HOST:-0.0.0.0}:\${GRADIO_PORT:-$PORT}"
 
 exec python "\$APP_DIR/gradio_app.py" \\
-  --model_path tencent/Hunyuan3D-2mv \\
+  --model_path "\$APP_DIR/models/tencent--Hunyuan3D-2mv" \\
   --subfolder $SUBFOLDER \\
-  --texgen_model_path tencent/Hunyuan3D-2 \\
   --low_vram_mode \\
   $FLASH_VDM \\
   --host \${GRADIO_HOST:-0.0.0.0} \\
