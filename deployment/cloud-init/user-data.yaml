@@ -1,0 +1,13 @@
+#cloud-config
+# Optional: Set Tailscale auth key via environment variable
+# Replace YOUR_TAILSCALE_AUTH_KEY with your actual key, or remove these lines for manual setup
+write_files:
+  - path: /etc/environment
+    append: true
+    content: |
+      # Uncomment and set your Tailscale auth key for automatic setup
+      # TAILSCALE_AUTH_KEY=tskey-auth-YOUR-KEY-HERE
+
+runcmd:
+  - [ su, -l, ubuntu, -c, "cd /home/ubuntu && git clone https://github.com/baihne/comfy-stack || true" ]
+  - [ su, -l, ubuntu, -c, "cd /home/ubuntu/comfy-stack/stacks/comfyui && ./bootstrap_comfy.sh" ]
