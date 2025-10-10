@@ -14,11 +14,14 @@ git clone https://github.com/baihne/comfy-stack && cd comfy-stack
 # 4. Deploy Hunyuan3D + Tailscale
 ./deployment/deploy_hunyuan.sh TAILSCALE_AUTH_KEY
 
+# 4b. Deploy Hunyuan3D Multiview + Tailscale
+./deployment/deploy_hunyuan_multiview.sh TAILSCALE_AUTH_KEY standard
+
 # 5. Deploy both stacks (use the all-in-one script)
 ./deployment/deploy_complete_stack.sh both I2V_A14B TAILSCALE_AUTH_KEY
 ```
 
-**Access**: `http://100.x.x.x:8188` (ComfyUI) | `http://100.x.x.x:7860` (Hunyuan3D) | `ssh ubuntu@100.x.x.x`
+**Access**: `http://100.x.x.x:8188` (ComfyUI) | `http://100.x.x.x:7860` (Hunyuan3D) | `http://100.x.x.x:7861` (Hunyuan3D-2mv) | `ssh ubuntu@100.x.x.x`
 
 ---
 
@@ -43,7 +46,8 @@ ssh -L 8188:localhost:8188 ubuntu@YOUR-VPS-IP
 | ComfyUI + I2V | `./deployment/deploy_comfyui_wan.sh I2V_A14B TAILSCALE_AUTH_KEY` | Image to Video 14B |
 | ComfyUI + T2V | `./deployment/deploy_comfyui_wan.sh T2V_A14B TAILSCALE_AUTH_KEY` | Text to Video 14B |
 | ComfyUI + TI2V | `./deployment/deploy_comfyui_wan.sh TI2V_5B TAILSCALE_AUTH_KEY` | Text/Image to Video 5B |
-| Hunyuan3D | `./deployment/deploy_hunyuan.sh TAILSCALE_AUTH_KEY` | 3D Generation |
+| Hunyuan3D | `./deployment/deploy_hunyuan.sh TAILSCALE_AUTH_KEY` | 3D Generation (2.1) |
+| Hunyuan3D Multiview | `./deployment/deploy_hunyuan_multiview.sh TAILSCALE_AUTH_KEY standard` | 3D Generation (2mv) |
 
 ---
 
