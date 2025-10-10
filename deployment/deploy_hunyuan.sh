@@ -7,7 +7,7 @@ set -euo pipefail
 #   ./deploy_hunyuan.sh [TAILSCALE_AUTH_KEY]
 #   
 # Examples:
-#   ./deploy_hunyuan.sh tskey-auth-your-key
+#   ./deploy_hunyuan.sh TAILSCALE_AUTH_KEY
 #   ./deploy_hunyuan.sh
 
 echo "======================================================================"

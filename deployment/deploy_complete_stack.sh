@@ -12,9 +12,9 @@ set -euo pipefail
 #   both      - Both ComfyUI and Hunyuan3D
 #
 # Examples:
-#   ./deploy_complete_stack.sh comfy I2V_A14B tskey-auth-your-key
-#   ./deploy_complete_stack.sh hunyuan "" tskey-auth-your-key
-#   ./deploy_complete_stack.sh both I2V_A14B tskey-auth-your-key
+#   ./deploy_complete_stack.sh comfy I2V_A14B TAILSCALE_AUTH_KEY
+#   ./deploy_complete_stack.sh hunyuan "" TAILSCALE_AUTH_KEY
+#   ./deploy_complete_stack.sh both I2V_A14B TAILSCALE_AUTH_KEY
 
 echo "======================================================================"
 echo "🚀 AI Stack Complete Deployment with Tailscale"

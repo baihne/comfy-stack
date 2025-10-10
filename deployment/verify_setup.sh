@@ -96,9 +96,9 @@ if [ "$ALL_GOOD" = true ]; then
     echo "🎉 All checks passed! Setup is ready."
     echo ""
     echo "🚀 Usage examples:"
-    echo "   ./deployment/deploy_comfyui_wan.sh I2V_A14B tskey-auth-YOUR-KEY"
-    echo "   ./deployment/deploy_hunyuan.sh tskey-auth-YOUR-KEY"
-    echo "   ./deployment/deploy_complete_stack.sh both I2V_A14B tskey-auth-YOUR-KEY"
+    echo "   ./deployment/deploy_comfyui_wan.sh I2V_A14B TAILSCALE_AUTH_KEY"
+    echo "   ./deployment/deploy_hunyuan.sh TAILSCALE_AUTH_KEY"
+    echo "   ./deployment/deploy_complete_stack.sh both I2V_A14B TAILSCALE_AUTH_KEY"
 else
     echo "❌ Some issues found. Please fix the above errors."
     exit 1

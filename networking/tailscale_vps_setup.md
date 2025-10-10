@@ -35,7 +35,7 @@ ssh -i /path/to/your/key user@your-vps-ip
 chmod +x install_tailscale_vps.sh
 
 # 4. Run installation with your auth key
-sudo ./install_tailscale_vps.sh tskey-auth-YOUR-AUTH-KEY-HERE
+sudo ./install_tailscale_vps.sh YOUR-TAILSCALE-AUTH-KEY
 ```
 
 ### Step 3: Verify Installation

@@ -7,7 +7,7 @@ set -euo pipefail
 #   ./deploy_comfyui_wan.sh [MODEL_VARIANT] [TAILSCALE_AUTH_KEY]
 #
 # Examples:
-#   ./deploy_comfyui_wan.sh I2V_A14B tskey-auth-your-key
+#   ./deploy_comfyui_wan.sh I2V_A14B TAILSCALE_AUTH_KEY
 #   ./deploy_comfyui_wan.sh T2V_A14B
 #   ./deploy_comfyui_wan.sh TI2V_5B
 

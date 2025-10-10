@@ -6,7 +6,7 @@ write_files:
     append: true
     content: |
       # Uncomment and set your Tailscale auth key for automatic setup
-      # TAILSCALE_AUTH_KEY=tskey-auth-YOUR-KEY-HERE
+      # TAILSCALE_AUTH_KEY=YOUR-TAILSCALE-AUTH-KEY
 
 runcmd:
   - [ su, -l, ubuntu, -c, "cd /home/ubuntu && git clone https://github.com/baihne/comfy-stack || true" ]
