@@ -57,10 +57,14 @@ case "$VARIANT" in
     download "split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors"
     download "split_files/vae/wan_2.1_vae.safetensors"
     download "split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+    # I2V LoRAs (missing from original script)
+    download "split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors"
+    download "split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors"
 
     mv -f /tmp/wan22/split_files/diffusion_models/wan2.2_i2v_*_14B_fp8_scaled.safetensors models/diffusion_models/
     mv -f /tmp/wan22/split_files/vae/wan_2.1_vae.safetensors models/vae/
     mv -f /tmp/wan22/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors models/text_encoders/
+    mv -f /tmp/wan22/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_*.safetensors models/loras/
     ;;
 esac
 
@@ -75,4 +79,13 @@ else
   nohup ~/ComfyUI/comfy-env/bin/python ~/ComfyUI/main.py --listen 127.0.0.1 --port 8188 > ~/comfyui.log 2>&1 &
 fi
 
-echo "Wan 2.2 ($VARIANT) installed. If T2V, LoRAs placed in models/loras/. Open via SSH tunnel: http://localhost:8188"
+echo "Wan 2.2 ($VARIANT) installed. LoRAs placed in models/loras/."
+
+# Setup I2V template if this is an I2V installation
+if [[ "$VARIANT" == "I2V_A14B" ]]; then
+  REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+  echo "Setting up I2V workflow template..."
+  "$REPO_ROOT/stacks/comfyui/setup_i2v_template.sh"
+fi
+
+echo "Open ComfyUI at: http://$(hostname -I | awk '{print $1}'):8188"
