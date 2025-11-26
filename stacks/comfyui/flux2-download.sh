@@ -8,25 +8,39 @@ set -euo pipefail
 # Env:
 #   HF_TOKEN          - optional Hugging Face token for gated repos
 #   MODEL_REPO        - HF repo id to download from (default: black-forest-labs/FLUX.2-dev)
-#   MODEL_INCLUDE_PAT - patterns to include (default: "*.safetensors")
+#   MODEL_INCLUDE_PAT - comma-separated patterns to include (default: "*.safetensors")
 
 cd ~/ComfyUI
 # shellcheck disable=SC1091
 source comfy-env/bin/activate
 
-pip install -q --upgrade "huggingface_hub>=0.25" hf-transfer || true
+pip install -q --upgrade "huggingface_hub==0.25.2" hf-transfer || true
 export HF_HUB_ENABLE_HF_TRANSFER=1
 
 MODEL_REPO="${MODEL_REPO:-black-forest-labs/FLUX.2-dev}"
 MODEL_INCLUDE_PAT="${MODEL_INCLUDE_PAT:-*.safetensors}"
 TMP_DIR="$(mktemp -d -t flux2-model-XXXX)"
+export MODEL_REPO MODEL_INCLUDE_PAT TMP_DIR HF_TOKEN
 
 echo "📥 Downloading Flux models from $MODEL_REPO (include: $MODEL_INCLUDE_PAT)"
-hf download "$MODEL_REPO" \
-  --local-dir "$TMP_DIR" \
-  --include "$MODEL_INCLUDE_PAT" \
-  ${HF_TOKEN:+--token "$HF_TOKEN"} \
-  --resume-download
+python - <<'PY'
+import os
+from huggingface_hub import snapshot_download
+
+repo = os.environ.get("MODEL_REPO", "black-forest-labs/FLUX.2-dev")
+patterns = [p.strip() for p in os.environ.get("MODEL_INCLUDE_PAT", "*.safetensors").split(",") if p.strip()]
+token = os.environ.get("HF_TOKEN") or None
+tmp_dir = os.environ["TMP_DIR"]
+
+snapshot_download(
+    repo_id=repo,
+    local_dir=tmp_dir,
+    allow_patterns=patterns,
+    token=token,
+    resume_download=True,
+    local_dir_use_symlinks=False,
+)
+PY
 
 mkdir -p models/diffusion_models models/vae models/text_encoders
 
