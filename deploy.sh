@@ -21,14 +21,13 @@ prompt_var() {
 }
 
 select_option() {
-  echo ""
-  echo "Select deployment:"
-  echo "  1) ComfyUI + Flux 2 (repack / FP8 mixed, Comfy-Org/flux2-dev; smallest download)"
-  echo "  2) ComfyUI + Flux 2 (full upstream, black-forest-labs/FLUX.2-dev; ~178GB)"
-  echo "  3) ComfyUI + Wan2.2 (TI2V_5B | T2V_A14B | I2V_A14B)"
-  echo "  4) Hunyuan3D-2mv Optimized (100GB VPS)"
-  echo "  5) Hunyuan3D Hybrid (larger VPS)"
-  echo "  6) Complete stack"
+  printf "\nSelect deployment:\n"
+  printf "  1) ComfyUI + Flux 2 (repack / FP8 mixed, Comfy-Org/flux2-dev; smallest download)\n"
+  printf "  2) ComfyUI + Flux 2 (full upstream, black-forest-labs/FLUX.2-dev; ~178GB)\n"
+  printf "  3) ComfyUI + Wan2.2 (TI2V_5B | T2V_A14B | I2V_A14B)\n"
+  printf "  4) Hunyuan3D-2mv Optimized (100GB VPS)\n"
+  printf "  5) Hunyuan3D Hybrid (larger VPS)\n"
+  printf "  6) Complete stack\n\n"
   local choice
   read -r -p "Enter choice [1-6]: " choice
   # trim spaces
