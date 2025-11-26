@@ -5,6 +5,9 @@ echo "[bootstrap] start $(date -Is)"
 
 # Resolve repo root (…/comfy-stack)
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+SERVICE_USER="$(whoami)"
+SERVICE_HOME="$HOME"
+SERVICE_PATH="$SERVICE_HOME/ComfyUI"
 
 # 0) System deps
 sudo apt update
@@ -51,8 +54,10 @@ if [ ! -f "models/checkpoints/v1-5-pruned-emaonly-fp16.safetensors" ]; then
 fi
 
 # 7) Install/enable systemd service
-pkill -f "python /home/ubuntu/ComfyUI/main.py" || true
+pkill -f "python $SERVICE_PATH/main.py" || true
 sudo install -m 0644 -o root -g root "$REPO_ROOT/stacks/comfyui/systemd/comfyui.service" /etc/systemd/system/comfyui.service
+# Patch service to current user/home
+sudo sed -i "s#User=ubuntu#User=$SERVICE_USER#; s#Group=ubuntu#Group=$SERVICE_USER#; s#/home/ubuntu/ComfyUI#$SERVICE_PATH#g" /etc/systemd/system/comfyui.service
 sudo systemctl daemon-reload
 sudo systemctl enable --now comfyui
 
