@@ -15,7 +15,9 @@ set -euo pipefail
 #   MODEL_REPO        - HF repo id to download from (default: Comfy-Org/flux2-dev)
 #   MODEL_INCLUDE_PAT - comma-separated patterns to include (default repack set above)
 
-cd ~/ComfyUI
+COMFY_PATH="${COMFY_PATH:-$HOME/ComfyUI}"
+
+cd "$COMFY_PATH"
 # shellcheck disable=SC1091
 source comfy-env/bin/activate
 
@@ -47,7 +49,7 @@ snapshot_download(
 )
 PY
 
-mkdir -p models/diffusion_models models/vae models/text_encoders
+mkdir -p "$COMFY_PATH/models/diffusion_models" "$COMFY_PATH/models/vae" "$COMFY_PATH/models/text_encoders"
 
 echo "📂 Placing model files into ComfyUI directories..."
 shopt -s nullglob
@@ -56,13 +58,13 @@ for f in "$TMP_DIR"/**/*.safetensors "$TMP_DIR"/*.safetensors; do
   base="$(basename "$f")"
   case "$rel" in
     text_encoder/*|*text_encoder*|*text-encoder*|*textencoder*|*clip*|*CLIP*|*t5*|*T5*)
-      dest="models/text_encoders"
+      dest="$COMFY_PATH/models/text_encoders"
       ;;
     vae/*|*vae*|*VAE*|ae.safetensors)
-      dest="models/vae"
+      dest="$COMFY_PATH/models/vae"
       ;;
     *)
-      dest="models/diffusion_models"
+      dest="$COMFY_PATH/models/diffusion_models"
       ;;
   esac
   echo " - $rel -> $dest/"
