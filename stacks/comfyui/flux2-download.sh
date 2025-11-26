@@ -47,19 +47,20 @@ mkdir -p models/diffusion_models models/vae models/text_encoders
 echo "📂 Placing model files into ComfyUI directories..."
 shopt -s nullglob
 for f in "$TMP_DIR"/**/*.safetensors "$TMP_DIR"/*.safetensors; do
+  rel="${f#$TMP_DIR/}"           # keep original subdir
   base="$(basename "$f")"
-  case "$base" in
-    *t5*|*T5*|*text_encoder*|*text-encoder*|*textencoder*)
+  case "$rel" in
+    text_encoder/*|*text_encoder*|*text-encoder*|*textencoder*|*clip*|*CLIP*|*t5*|*T5*)
       dest="models/text_encoders"
       ;;
-    *vae*|*VAE*)
+    vae/*|*vae*|*VAE*)
       dest="models/vae"
       ;;
     *)
       dest="models/diffusion_models"
       ;;
   esac
-  echo " - $base -> $dest/"
+  echo " - $rel -> $dest/"
   mv -f "$f" "$dest/"
 done
 shopt -u nullglob
