@@ -44,11 +44,23 @@ cd comfy-stack
 ```
 **Access:** `http://100.x.x.x:8188`
 
-### ComfyUI + Flux 2 (dev)
+### ComfyUI + Flux 2 (dev, repack)
 ```bash
 HF_TOKEN=<your_hf_token_if_needed> ./deployment/deploy_comfyui_flux2_dev.sh TAILSCALE_AUTH_KEY
 ```
 **Access:** `http://100.x.x.x:8188`
+
+### ComfyUI + Flux 2 (full upstream)
+```bash
+HF_TOKEN=<your_hf_token_if_needed> ./deployment/deploy_comfyui_flux2_full.sh TAILSCALE_AUTH_KEY
+```
+**Access:** `http://100.x.x.x:8188`
+
+### One-step launcher (choose stack interactively)
+```bash
+./deploy.sh
+```
+Select Flux 2 (repack or full), Wan2.2, or Hunyuan variants; you can also input Tailscale/HF tokens when prompted.
 
 ## 📱 Step 3: Access Services
 

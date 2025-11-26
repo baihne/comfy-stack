@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ComfyUI + Flux 2 (dev, repack) Deployment Script
+# ComfyUI + Flux 2 (full upstream) Deployment Script
 #
 # Usage:
-#   ./deployment/deploy_comfyui_flux2_dev.sh [TAILSCALE_AUTH_KEY]
+#   ./deployment/deploy_comfyui_flux2_full.sh [TAILSCALE_AUTH_KEY]
 # Env:
 #   HF_TOKEN          - Hugging Face token if the Flux repo is gated
 #   MODEL_REPO        - Override Flux repo (default: black-forest-labs/FLUX.2-dev)
 #   MODEL_INCLUDE_PAT - Override include patterns (default: "*.safetensors")
 
 echo "======================================================================"
-echo "🎨 ComfyUI + Flux 2 (dev, repack) Deployment"
+echo "🎨 ComfyUI + Flux 2 (full) Deployment"
 echo "======================================================================"
 echo "Starting deployment at $(date -Is)"
 
@@ -19,7 +19,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TAILSCALE_AUTH_KEY="${1:-${TAILSCALE_AUTH_KEY:-}}"
 
 echo "📋 Configuration:"
-echo "   Flux repo: ${MODEL_REPO:-Comfy-Org/flux2-dev (repack)}"
+echo "   Flux repo: ${MODEL_REPO:-black-forest-labs/FLUX.2-dev}"
 echo "   Tailscale: $([ -n "$TAILSCALE_AUTH_KEY" ] && echo '✅ Enabled' || echo '❌ Disabled')"
 echo ""
 
@@ -38,8 +38,8 @@ echo "🎨 Step 2: Bootstrapping ComfyUI..."
 "$REPO_ROOT/stacks/comfyui/bootstrap_comfy.sh"
 
 echo ""
-echo "📥 Step 3: Installing Flux 2 (repack) models..."
-"$REPO_ROOT/stacks/comfyui/flux2-repack-download.sh"
+echo "📥 Step 3: Installing Flux 2 (full) models..."
+"$REPO_ROOT/stacks/comfyui/flux2-download.sh"
 
 echo ""
 echo "🧪 Final Step: Verifying installation..."
@@ -65,7 +65,7 @@ fi
 
 echo ""
 echo "======================================================================"
-echo "🎉 ComfyUI + Flux 2 (dev) Deployment Complete!"
+echo "🎉 ComfyUI + Flux 2 (full) Deployment Complete!"
 echo "======================================================================"
 echo "Timestamp: $(date -Is)"
 
