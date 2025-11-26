@@ -44,6 +44,12 @@ cd comfy-stack
 ```
 **Access:** `http://100.x.x.x:8188`
 
+### ComfyUI + Flux 2 (dev)
+```bash
+HF_TOKEN=<your_hf_token_if_needed> ./deployment/deploy_comfyui_flux2_dev.sh TAILSCALE_AUTH_KEY
+```
+**Access:** `http://100.x.x.x:8188`
+
 ## 📱 Step 3: Access Services
 
 | Service | Port | Access URL |
