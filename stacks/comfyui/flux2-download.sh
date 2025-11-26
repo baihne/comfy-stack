@@ -14,7 +14,7 @@ cd ~/ComfyUI
 # shellcheck disable=SC1091
 source comfy-env/bin/activate
 
-pip install -q --upgrade "huggingface_hub==0.25.2" hf-transfer || true
+pip install -q --upgrade "huggingface_hub>=0.36,<1.0" hf-transfer || true
 export HF_HUB_ENABLE_HF_TRANSFER=1
 
 MODEL_REPO="${MODEL_REPO:-black-forest-labs/FLUX.2-dev}"
