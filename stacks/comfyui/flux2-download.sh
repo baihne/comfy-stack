@@ -53,7 +53,7 @@ for f in "$TMP_DIR"/**/*.safetensors "$TMP_DIR"/*.safetensors; do
     text_encoder/*|*text_encoder*|*text-encoder*|*textencoder*|*clip*|*CLIP*|*t5*|*T5*)
       dest="models/text_encoders"
       ;;
-    vae/*|*vae*|*VAE*)
+    vae/*|*vae*|*VAE*|ae.safetensors)
       dest="models/vae"
       ;;
     *)
